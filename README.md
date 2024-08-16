@@ -40,3 +40,7 @@ pip install -r requirements.txt
 - **Select Method** Choose one of the anomaly detection methods from the dropdown menu.
 - **Run Analysis** Click "Run Analysis" to perform the anomaly detection.
 - **View Results** The results will be displayed in the tree view, and anomalies will be visualized in the polar plot.
+
+## Video Demonstration
+[![Anomaly Detection Video](https://img.youtube.com/vi/WcK0Z95NF1c/0.jpg)](https://www.youtube.com/watch?v=WcK0Z95NF1c)
+https://youtu.be/WcK0Z95NF1c

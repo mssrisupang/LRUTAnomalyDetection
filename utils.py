@@ -46,6 +46,30 @@ def display_results_in_treeview(tree, df, plot_polar_anomalies, root, right_fram
             last_row_segments = list(map(int, last_row_segments.split(',')))
         plot_polar_anomalies(root, right_frame, last_row_segments)  # Include right_frame
 
+def display_dwg_image(right_frame, case_number):
+    # Construct the file path for the DWG plot (assuming it's saved as an image)
+    base_path = get_base_path()
+    dwg_folder = "polar_DWG"
+    filename = f"case{case_number}.png"  # Adjust according to your naming convention
+    #image_path = os.path.join(base_path, filename)
+    image_path = os.path.join(base_path, dwg_folder, filename)
+
+    if os.path.exists(image_path):
+        img = Image.open(image_path)
+        img = img.resize((250, 250), Image.ANTIALIAS)  # Resize the image if necessary
+        img_photo = ImageTk.PhotoImage(img)
+
+        if hasattr(right_frame, 'dwg_image_label'):
+            right_frame.dwg_image_label.configure(image=img_photo)
+            right_frame.dwg_image_label.image = img_photo  # Keep a reference
+        else:
+            right_frame.dwg_image_label = tk.Label(right_frame, image=img_photo)
+            right_frame.dwg_image_label.image = img_photo  # Keep a reference
+            right_frame.dwg_image_label.grid(row=1, column=1, pady=10)  # Position it below the polar plot
+    else:
+        print("DWG image file does not exist:", image_path)
+
+
 
 def plot_polar_anomalies(root, right_frame, anomaly_segments):
     print("Plotting anomalies for segments:", anomaly_segments)  # Debug print
@@ -53,7 +77,7 @@ def plot_polar_anomalies(root, right_frame, anomaly_segments):
     if hasattr(right_frame, 'canvas'):
         plt.close('all')  # This closes all figures to manage memory usage
 
-    fig, ax = plt.subplots(subplot_kw={'projection': 'polar'}, figsize=(4, 4))
+    fig, ax = plt.subplots(subplot_kw={'projection': 'polar'}, figsize=(3, 3))
     num_segments = 8
     # Create theta for segment centers, but rotate by 22.5 degrees (pi/8 radians) so each segment aligns correctly
     theta = np.linspace(0.0, 2 * np.pi, num_segments, endpoint=False) + (np.pi / num_segments)
@@ -84,7 +108,7 @@ def plot_polar_anomalies(root, right_frame, anomaly_segments):
         right_frame.canvas.draw()
 
 #def on_tree_select(event):
-def on_tree_select(event, tree, root, right_frame, plot_polar_anomalies, display_ground_truth_image):
+def on_tree_select(event, tree, root, right_frame, plot_polar_anomalies, display_ground_truth_image, display_dwg_image):
     selected_item = tree.focus()  # Get selected item in the Treeview
     if selected_item:
         row_values = tree.item(selected_item, 'values')
@@ -98,3 +122,6 @@ def on_tree_select(event, tree, root, right_frame, plot_polar_anomalies, display
         anomaly_segments = list(map(int, row_values[3].split(', ')))
         plot_polar_anomalies(root, right_frame, anomaly_segments)
         display_ground_truth_image(right_frame, case_number, frequency)
+
+        #Update the DWG image as well
+        display_dwg_image(right_frame, case_number)

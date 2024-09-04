@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import filedialog, ttk
 from file_handling import upload_excel, set_base_path, get_base_path
 from run_analysis import run_analysis_
-from utils import on_tree_select, display_ground_truth_image, plot_polar_anomalies
+from utils import on_tree_select, display_ground_truth_image, plot_polar_anomalies, display_dwg_image
 
 
 def set_image_path(results_text_widget: tk.Text):
@@ -19,14 +19,22 @@ def setup_gui():
     root = tk.Tk()
     root.title('Anomaly Detection GUI')
 
+    # Resize the entire window
+    root.geometry("1280x720")  # Adjust to your preferred dimensions
+
     left_frame = tk.Frame(root)
     right_frame = tk.Frame(root)
+    polar_frame = tk.Frame(root)  # Frame for the polar_dwg image
     left_frame.grid(row=0, column=0, sticky='nsew')
     right_frame.grid(row=0, column=1, sticky='nsew')
+    polar_frame.grid(row=0, column=2, sticky='nsew')  # Place next to the right_frame
+
+    #left_frame.grid(row=0, column=0, sticky='nsew')
+    #right_frame.grid(row=0, column=1, sticky='nsew')
 
     root.grid_columnconfigure(0, weight=1)  # Give weight for expansion
-    root.grid_columnconfigure(1, weight=3)  # More weight for right_frame
-
+    root.grid_columnconfigure(1, weight=2)  # More weight for right_frame
+    root.grid_columnconfigure(2, weight=2)  # Weight for polar_frame
     
     df_merged = None  # Local variable to store the DataFrame
 
@@ -74,7 +82,7 @@ def setup_gui():
     tree.column('Anomaly Segments', width=50)
     tree.grid(row=4, column=0, padx=10, pady=10, sticky='nsew')  # Using grid instead of pack
     #tree.bind('<<TreeviewSelect>>', on_tree_select)
-    tree.bind('<<TreeviewSelect>>', lambda event: on_tree_select(event, tree, root, right_frame,plot_polar_anomalies, display_ground_truth_image))
+    tree.bind('<<TreeviewSelect>>', lambda event: on_tree_select(event, tree, root, right_frame,plot_polar_anomalies, display_ground_truth_image, display_dwg_image))
 
 
     left_frame.grid_rowconfigure(4, weight=1)  # Make the treeview expandable

@@ -3,7 +3,7 @@
 from gui import setup_gui
 from file_handling import upload_excel
 from run_analysis import run_analysis_
-from utils import display_ground_truth_image, display_results_in_treeview, plot_polar_anomalies, on_tree_select
+from utils import on_tree_select, display_ground_truth_image, plot_polar_anomalies, display_dwg_image
 
 def main():
     # Setup the GUI

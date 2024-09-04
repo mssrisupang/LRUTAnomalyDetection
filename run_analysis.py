@@ -14,7 +14,7 @@ def detect_anomalies(data: pd.DataFrame, method: str) -> pd.DataFrame:
     # Placeholder for actual anomaly detection logic
     return pd.DataFrame()  # Returning empty DataFrame for illustration
 
-#def z_score_method(df, frequencies):
+
 def z_score_method(df: pd.DataFrame, frequencies: List[str]) -> pd.DataFrame:
     """
     Detects outliers using Z-score method for specified frequencies.

@@ -29,9 +29,7 @@ def setup_gui():
     right_frame.grid(row=0, column=1, sticky='nsew')
     polar_frame.grid(row=0, column=2, sticky='nsew')  # Place next to the right_frame
 
-    #left_frame.grid(row=0, column=0, sticky='nsew')
-    #right_frame.grid(row=0, column=1, sticky='nsew')
-
+    
     root.grid_columnconfigure(0, weight=1)  # Give weight for expansion
     root.grid_columnconfigure(1, weight=2)  # More weight for right_frame
     root.grid_columnconfigure(2, weight=2)  # Weight for polar_frame

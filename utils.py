@@ -75,7 +75,7 @@ def plot_polar_anomalies(root, right_frame, anomaly_segments):
     print("Plotting anomalies for segments:", anomaly_segments)  # Debug print
     # Close previous figure if it exists to avoid memory issues
     if hasattr(right_frame, 'canvas'):
-        plt.close('all')  # This closes all figures to manage memory usage
+        plt.close('all')  
 
     fig, ax = plt.subplots(subplot_kw={'projection': 'polar'}, figsize=(3, 3))
     num_segments = 8

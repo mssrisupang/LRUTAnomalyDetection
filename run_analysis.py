@@ -156,7 +156,7 @@ def local_outlier_factor_method(df: pd.DataFrame, frequencies: List[str]):
     return outliers_lof_result_df
 
 
-def run_analysis_(df_merged: pd.DataFrame, method:str, results_text_widget: tk.Text, tree,root, right_frame):
+def run_analysis_(df_merged: pd.DataFrame, method:str, results_text_widget: tk.Text, tree,root, polar_plot):
    
 
     if df_merged is not None:
@@ -178,7 +178,8 @@ def run_analysis_(df_merged: pd.DataFrame, method:str, results_text_widget: tk.T
         
         if not results_df.empty:
             #display_results_in_treeview(results_df)
-            display_results_in_treeview(tree, results_df, plot_polar_anomalies, root, right_frame)
+            
+            display_results_in_treeview(tree, results_df, plot_polar_anomalies, root, polar_plot)
             results_text_widget.insert(tk.END, f"Analysis complete. Displaying results for {method}.\n")
         else:
             results_text_widget.insert(tk.END, "No anomalies detected or empty dataset.\n")

@@ -17,56 +17,72 @@ def set_image_path(results_text_widget: tk.Text):
 def setup_gui():
     global root, tree, results_text, method_var, right_frame
     root = tk.Tk()
-    root.title('Anomaly Detection GUI')
+    root.title('LRUT Anomaly Detection GUI')
 
-    # Resize the entire window
-    root.geometry("1280x720")  # Adjust to your preferred dimensions
+    width = root.winfo_screenwidth() 
+    height = root.winfo_screenheight()
+    root.geometry("%dx%d" % (width, height))
+    root.protocol("WM_DELETE_WINDOW", root.quit)
 
-    left_frame = tk.Frame(root)
-    right_frame = tk.Frame(root)
-    polar_frame = tk.Frame(root)  # Frame for the polar_dwg image
-    left_frame.grid(row=0, column=0, sticky='nsew')
-    right_frame.grid(row=0, column=1, sticky='nsew')
-    polar_frame.grid(row=0, column=2, sticky='nsew')  # Place next to the right_frame
+    left_frame = tk.Frame(root, width=100, height=200, bg='grey')
+    left_frame.grid(row=0, column=0, padx=2, pady=2,sticky='nsew')
+
+    tool_bar = tk.Frame(left_frame, width=100, height=40, bg='grey')
+    tool_bar.grid(row=0, column=0, padx=2, pady=2,sticky='nsew')
+
+    tree_frame = tk.Frame(left_frame, width=100, height=200, bg='grey')
+    tree_frame.grid(row=1, column=0, padx=2, pady=2,sticky='nsew')
 
     
-    root.grid_columnconfigure(0, weight=1)  # Give weight for expansion
-    root.grid_columnconfigure(1, weight=2)  # More weight for right_frame
-    root.grid_columnconfigure(2, weight=2)  # Weight for polar_frame
+    right_frame = tk.Frame(root, width=100, height=100, bg='grey')
+    right_frame.grid(row=0, column=1, padx=2, pady=2,sticky='nsew')
+    
+    polar_plot = tk.Frame(right_frame, width=100, height=30)
+    tk.Label(right_frame, text="Anomaly Detection").grid(row=0, column=2, padx=2, pady=2)
+    polar_plot.grid(row=0, column=1, padx=2, pady=2)
+
+    ground_frame = tk.Frame(right_frame, width=100, height=100, bg='grey')
+    ground_frame .grid(row=1, column=2, padx=2, pady=2,sticky='nsew')  # Place next 
+    
+    dwg_frame = tk.Frame(right_frame, width=100, height=100, bg='grey')
+    #tk.Label(right_frame, text="DWG Image").grid(row=1, column=1, padx=2, pady=2)
+    #tk.Label(right_frame, text="Polar Plot").grid(row=1, column=2, padx=2, pady=2)
+    dwg_frame.grid(row=1, column=1, padx=2, pady=2,sticky='nsew')  # Place next to the right_frame
+   
+   
     
     df_merged = None  # Local variable to store the DataFrame
-
-    def handle_upload():
-        nonlocal df_merged
-        df_merged = upload_excel(results_text)    
-
+    df_merged = upload_excel()    
+    
     def handle_run_analysis():
             if df_merged is not None:
-                run_analysis_(df_merged, method_var.get(), results_text,tree,root, right_frame)
+                run_analysis_(df_merged, method_var.get(), results_text,tree,root, polar_plot)
             else:
                 results_text.insert('1.0', "Please upload a file before running analysis.\n")
 
-    
-    
-    upload_btn = tk.Button(left_frame, text="Upload Excel File", command=handle_upload)
-    upload_btn.grid(row=0, column=0, padx=10, pady=10)
-    
-    path_btn = tk.Button(left_frame, text="Set Image Base Path", command=lambda: set_image_path(results_text))
-    path_btn.grid(row=0, column=1, padx=10, pady=10)   
+    path_btn = tk.Button(tool_bar, text="Set Image Base Path", command=lambda: set_image_path(results_text))
+    path_btn.grid(row=0, column=1, padx=2, pady=2)   
 
+    # Create radio buttons for method selection
     method_var = tk.StringVar()
-    method_var.set("Select Method")
+    method_var.set("Z-Score Method")  # Default selection
+
     methods = ['Z-Score Method', 'Modified Z-Score Method', 'Local Outlier Factor', 'OneClass SVM']
-    method_menu = ttk.Combobox(left_frame, textvariable=method_var, values=methods)
-    method_menu.grid(row=1, column=0, padx=10, pady=10)
+    method_label = tk.Label(tool_bar, text="Select Method:")
+    method_label.grid(row=1, column=0, padx=2, pady=2)
 
-    run_btn = tk.Button(left_frame, text="Run Analysis", command=handle_run_analysis)
-    run_btn.grid(row=2, column=0, padx=10, pady=10)
+    for i, method in enumerate(methods):
+        radio_button = tk.Radiobutton(tool_bar, text=method, variable=method_var, value=method)
+        radio_button.grid(row=2+i, column=0, padx=2, pady=2, sticky='nsew')
 
-    results_text = tk.Text(left_frame, height=10, width=50)
-    results_text.grid(row=3, column=0, padx=10, pady=10)
+    
+    run_btn = tk.Button(tool_bar, text="Run Analysis", font=('tahoma 13') ,bg='RED',command=handle_run_analysis)
+    run_btn.grid(row=2, column=1, padx=3, pady=3)
 
-    tree = ttk.Treeview(left_frame, columns=('Case', 'Frequency', 'Defect', 'Anomaly Segments'), show='headings')
+    results_text = tk.Text(tool_bar, height=10, width=40)
+    results_text.grid(row=0, column=0, padx=2, pady=2)
+
+    tree = ttk.Treeview(tree_frame, columns=('Case', 'Frequency', 'Defect', 'Anomaly Segments'), show='headings')
     tree.heading('Case', text='#Case')
     tree.column('Case', width=20)  # Set width for 'Case' column
 
@@ -80,11 +96,16 @@ def setup_gui():
     tree.column('Anomaly Segments', width=50)
     tree.grid(row=4, column=0, padx=10, pady=10, sticky='nsew')  # Using grid instead of pack
     #tree.bind('<<TreeviewSelect>>', on_tree_select)
-    tree.bind('<<TreeviewSelect>>', lambda event: on_tree_select(event, tree, root, right_frame,plot_polar_anomalies, display_ground_truth_image, display_dwg_image))
+
+    tree.bind('<<TreeviewSelect>>', lambda event: on_tree_select(
+        event, tree, root, polar_plot, right_frame, dwg_frame, 
+        plot_polar_anomalies, ground_frame, display_ground_truth_image, display_dwg_image
+    ))
+    
 
 
-    left_frame.grid_rowconfigure(4, weight=1)  # Make the treeview expandable
-    left_frame.grid_columnconfigure(0, weight=1)
+    tree_frame.grid_rowconfigure(4, weight=1)  # Make the treeview expandable
+    tree_frame.grid_columnconfigure(0, weight=1)
 
     root.mainloop()
 

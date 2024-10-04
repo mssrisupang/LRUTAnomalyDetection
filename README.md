@@ -41,5 +41,4 @@ pip install -r requirements.txt
 - **View Results** The results will be displayed in the tree view, and anomalies will be visualized in the polar plot.
 
 ## Video Demonstration
-[![Anomaly Detection Video](https://img.youtube.com/vi/WfHFRsidWQU?si/0.jpg)](https://www.youtube.com/watch?v=WfHFRsidWQU?si)
-
+[![Watch the video](https://img.youtube.com/vi/WfHFRsidWQU/0.jpg)](https://youtu.be/WfHFRsidWQU)

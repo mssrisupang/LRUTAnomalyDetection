@@ -35,12 +35,11 @@ pip install -r requirements.txt
 ```
 
 ## How to Use
-- **Upload Data** Use the "Upload Excel File" button to load your dataset.
 - **Set Image Base Path** Use the "Set Image Base Path" button to specify the directory where your ground truth images are stored.
 - **Select Method** Choose one of the anomaly detection methods from the dropdown menu.
 - **Run Analysis** Click "Run Analysis" to perform the anomaly detection.
 - **View Results** The results will be displayed in the tree view, and anomalies will be visualized in the polar plot.
 
 ## Video Demonstration
-[![Anomaly Detection Video](https://img.youtube.com/vi/WcK0Z95NF1c/0.jpg)](https://www.youtube.com/watch?v=WcK0Z95NF1c)
+[![Anomaly Detection Video](https://img.youtube.com/vi/WfHFRsidWQU?si/0.jpg)](https://www.youtube.com/watch?v=WfHFRsidWQU?si)
 
